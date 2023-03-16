@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/donga_st_d?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: srfsrf0103
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      show-sql: true
+      format_sql: true
