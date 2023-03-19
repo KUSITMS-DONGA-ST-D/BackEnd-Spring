@@ -1,10 +1,12 @@
 package com.kusithms.dongastd.domain.livebroadcast.service;
 
+import com.kusithms.dongastd.domain.livebroadcast.dto.LiveScheduleResponse;
 import com.kusithms.dongastd.domain.livebroadcast.entity.LiveBroadcast;
 import com.kusithms.dongastd.domain.livebroadcast.repository.LiveBroadCastRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +25,12 @@ public class LiveBroadcastService {
         }
 
         return liveStartTimes;
+    }
+
+    public List<LiveScheduleResponse> findTodayLive() {
+        LocalDate now = LocalDate.now();
+        LocalDate yesterDay = now.minusDays(1);
+        List<LiveScheduleResponse> todayLives = liveBroadCastRepo.findAllByStartTimeBetween(yesterDay, now);
+        return todayLives;
     }
 }
