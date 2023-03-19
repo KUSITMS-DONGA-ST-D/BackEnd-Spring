@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,13 @@ import java.util.List;
 public class ContentService {
     private final ContentRepository contentRepo;
 
-    public List<LocalDateTime> findContentSchedule() {
+    public List<String> findContentSchedule() {
         List<Content> contents = contentRepo.findAll();
-        List<LocalDateTime> createTimes = new ArrayList<>();
+        List<String> createTimes = new ArrayList<>();
 
         for (int i = 0; i < contents.size(); i++) {
-            createTimes.add(contents.get(i).getCreatedDate());
+            String time = contents.get(i).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            createTimes.add(time);
         }
         return createTimes;
     }

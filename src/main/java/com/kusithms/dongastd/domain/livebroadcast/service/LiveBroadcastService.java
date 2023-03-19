@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,13 @@ import java.util.List;
 public class LiveBroadcastService {
     private final LiveBroadCastRepo liveBroadCastRepo;
 
-    public List<LocalDateTime> findLiveSchedule() {
+    public List<String> findLiveSchedule() {
         List<LiveBroadcast> liveBroadcasts = liveBroadCastRepo.findAll();
-        List<LocalDateTime> liveStartTimes = new ArrayList<>();
+        List<String> liveStartTimes = new ArrayList<>();
 
         for (int i = 0; i < liveBroadcasts.size(); i++) {
-            liveStartTimes.add(liveBroadcasts.get(i).getStartTime());
+            String date = liveBroadcasts.get(i).getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            liveStartTimes.add(date);
         }
 
         return liveStartTimes;
