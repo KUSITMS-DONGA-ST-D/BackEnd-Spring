@@ -14,20 +14,26 @@ public class TodayLive {
     private String liveUrl;
     private String liveTitle;
     private String startTime;
-//    private String status;
+    private String status;
 
     @Builder
-    public TodayLive(String liveUrl, String liveTitle, LocalDateTime startTime) {
+    public TodayLive(String liveUrl, String liveTitle, LocalDateTime startTime, String status) {
         this.liveTitle = liveTitle;
         this.liveUrl = liveUrl;
         this.startTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.status = status;
     }
 
     public static TodayLive of(LiveBroadcast liveBroadcast) {
+        String status = "yet";
+        if (LocalDateTime.now().isAfter(liveBroadcast.getEndTime()))
+            status = "finish";
+
         return TodayLive.builder()
                 .liveTitle(liveBroadcast.getTitle())
                 .liveUrl(liveBroadcast.getUrl())
                 .startTime(liveBroadcast.getStartTime())
+                .status(status)
                 .build();
     }
 }
