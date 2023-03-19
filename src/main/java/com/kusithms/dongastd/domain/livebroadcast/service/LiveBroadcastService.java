@@ -1,5 +1,6 @@
 package com.kusithms.dongastd.domain.livebroadcast.service;
 
+import com.kusithms.dongastd.domain.livebroadcast.dto.TodayLive;
 import com.kusithms.dongastd.domain.livebroadcast.entity.LiveBroadcast;
 import com.kusithms.dongastd.domain.livebroadcast.repository.LiveBroadCastRepo;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,16 @@ public class LiveBroadcastService {
         return liveStartTimes;
     }
 
-    public List<LiveBroadcast> findTodayLive() {
-        LocalDate now = LocalDate.now();
-        LocalDate yesterDay = now.minusDays(1);
-        List<LiveBroadcast> todayLives = liveBroadCastRepo.findAllByStartTimeBetween(yesterDay, now);
+    public List<TodayLive> findTodayLive() {
+        List<TodayLive> todayLives = new ArrayList<>();
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime end = start.plusDays(1);
+        List<LiveBroadcast> liveBroadcasts = liveBroadCastRepo.findAllByStartTimeBetween(start, end);
+
+        for (int i = 0; i < liveBroadcasts.size(); i++) {
+            todayLives.add(TodayLive.of(liveBroadcasts.get(i)));
+        }
+
         return todayLives;
     }
 }
