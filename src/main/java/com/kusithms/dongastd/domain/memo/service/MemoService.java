@@ -17,38 +17,43 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
-    private Map<String, Object> result = new HashMap<>();
-    private List<String> contents = new ArrayList<>();
     private LocalDateTime today = LocalDate.now().atStartOfDay();
 
     public Map<String, Object> findYesterday() {
+        Map<String, Object> result = new HashMap<>();
+
         LocalDateTime start = today.minusDays(1);
 
-        return getResult(start, today);
+        return getResult(result, start, today);
     }
 
     public Map<String, Object> findToday() {
+        Map<String, Object> result = new HashMap<>();
+
         LocalDateTime end = today.plusDays(1);
 
-        return getResult(today, end);
+        return getResult(result, today, end);
     }
 
     public Map<String, Object> findTomorrow() {
+        Map<String, Object> result = new HashMap<>();
+
         LocalDateTime start = today.plusDays(1);
         LocalDateTime end = today.plusDays(2);
 
-        return getResult(start, end);
+        return getResult(result, start, end);
     }
 
-    private Map<String, Object> getResult(LocalDateTime start, LocalDateTime end) {
-        List<Memo> tomorrowMemo = memoRepository.findAllByCreatedDateBetween(start, end);
+    private Map<String, Object> getResult(Map<String, Object> result, LocalDateTime start, LocalDateTime end) {
+        List<Memo> memos = memoRepository.findAllByCreatedDateBetween(start, end);
+        List<String> contents = new ArrayList<>();
 
-        for (int i = 0; i < tomorrowMemo.size(); i++) {
-            contents.add(tomorrowMemo.get(i).getContent());
+        for (int i = 0; i < memos.size(); i++) {
+            contents.add(memos.get(i).getContent());
         }
 
-        if (!tomorrowMemo.isEmpty())
-            result.put("date", tomorrowMemo.get(0).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (!memos.isEmpty())
+            result.put("date", memos.get(0).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         result.put("contents", contents);
 
         return result;
