@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,15 +22,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Content extends BaseEntity {
 
-	@Id@GeneratedValue
+	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "content_id")
 	private Long id;
 
 	@Column(name = "content_title")
 	private String title;
 
-	@Column(name = "content_content")
-	private String content;
+	@Column(name = "content_explain")
+	private String vodExplain;
 
 	@Embedded
 	private ContentType type;
@@ -39,10 +40,10 @@ public class Content extends BaseEntity {
 	private User user;
 
 	@Builder
-	public Content(Long id, String title, String content, ContentType type) {
+	public Content(Long id, String title, String vodExplain, ContentType type) {
 		this.id = id;
 		this.title = title;
-		this.content = content;
+		this.vodExplain = vodExplain;
 		this.type = type;
 	}
 }
