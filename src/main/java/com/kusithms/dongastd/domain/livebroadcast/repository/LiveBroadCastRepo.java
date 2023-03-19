@@ -1,6 +1,5 @@
 package com.kusithms.dongastd.domain.livebroadcast.repository;
 
-import com.kusithms.dongastd.domain.livebroadcast.dto.LiveScheduleResponse;
 import com.kusithms.dongastd.domain.livebroadcast.entity.LiveBroadcast;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface LiveBroadCastRepo extends JpaRepository<LiveBroadcast, Long> {
-    List<LiveScheduleResponse> findAllByStartTimeBetween(LocalDate startDate, LocalDate finishDate);
+    List<LiveBroadcast> findAllByStartTimeBetween(LocalDate startDate, LocalDate finishDate);
 }
