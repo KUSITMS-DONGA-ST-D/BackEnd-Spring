@@ -44,4 +44,8 @@ public class ContentData extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "content_id")
 	private Content content;
+
+	public void addContent(Content content) {
+		this.content = content;
+	}
 }

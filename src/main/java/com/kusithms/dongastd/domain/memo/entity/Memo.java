@@ -32,6 +32,10 @@ public class Memo extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	public void addUser(User user) {
+		this.user = user;
+	}
+
 	@Builder
 	public Memo(Long id, String content) {
 		this.id = id;

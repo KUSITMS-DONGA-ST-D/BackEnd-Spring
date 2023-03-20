@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +32,12 @@ public class Interest extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "content_id")
 	private Content content;
+
+	public void addUser(User user) {
+		this.user = user;
+	}
+
+	public void addContent(Content content) {
+		this.content = content;
+	}
 }
