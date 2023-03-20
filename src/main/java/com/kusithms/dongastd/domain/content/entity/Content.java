@@ -47,4 +47,8 @@ public class Content extends BaseEntity {
 		this.vodExplain = vodExplain;
 		this.category = category;
 	}
+
+	public void addUser(User user) {
+		this.user = user;
+	}
 }

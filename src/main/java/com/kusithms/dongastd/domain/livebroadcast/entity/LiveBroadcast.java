@@ -38,6 +38,9 @@ public class LiveBroadcast extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	public void addUser(User user) {
+		this.user = user;
+	}
 	@Builder
 	public LiveBroadcast(Long id, String title, String url, LocalDateTime startTime, LocalDateTime endTime) {
 		this.id = id;

@@ -37,10 +37,16 @@ public class Comment extends BaseEntity {
 
 
 	@Builder
-	public Comment(Long id, String comment, User user, Content content) {
+	public Comment(Long id, String comment) {
 		this.id = id;
 		this.comment = comment;
+	}
+
+	public void addUser(User user) {
 		this.user = user;
+	}
+
+	public void addContent(Content content) {
 		this.content = content;
 	}
 }

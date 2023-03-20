@@ -35,6 +35,10 @@ public class Notice extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	public void addUser(User user) {
+		this.user = user;
+	}
+
 	@Builder
 	public Notice(Long id, String title, String content) {
 		this.id = id;
