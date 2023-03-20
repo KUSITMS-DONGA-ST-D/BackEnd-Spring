@@ -1,6 +1,7 @@
 package com.kusithms.dongastd.domain.pageview.entity;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 import com.kusithms.dongastd.common.domain.BaseEntity;
 
@@ -27,10 +28,11 @@ public class PageView extends BaseEntity {
 	private Duration duration;
 
 	@Builder
-	public PageView(Long id, int viewCount, Duration duration) {
+	public PageView(Long id, int viewCount, Duration duration, LocalDateTime localDateTime) {
 		this.id = id;
 		this.viewCount = viewCount;
 		this.duration = duration;
+		setCreatedDate(localDateTime);
 	}
 
 	@Override
