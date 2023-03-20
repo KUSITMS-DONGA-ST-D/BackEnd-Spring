@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jdk.jfr.ContentType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,18 +33,18 @@ public class Content extends BaseEntity {
 	@Column(name = "content_explain")
 	private String vodExplain;
 
-	@Embedded
-	private ContentType type;
+	@Column(name = "content_category")
+	private String category;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
 	@Builder
-	public Content(Long id, String title, String vodExplain, ContentType type) {
+	public Content(Long id, String title, String vodExplain, String category) {
 		this.id = id;
 		this.title = title;
 		this.vodExplain = vodExplain;
-		this.type = type;
+		this.category = category;
 	}
 }

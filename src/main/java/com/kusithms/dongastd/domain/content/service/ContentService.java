@@ -20,7 +20,7 @@ public class ContentService {
         List<String> createTimes = new ArrayList<>();
 
         for (int i = 0; i < contents.size(); i++) {
-            String time = contents.get(i).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String time = contents.get(i).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             createTimes.add(time);
         }
         return createTimes;

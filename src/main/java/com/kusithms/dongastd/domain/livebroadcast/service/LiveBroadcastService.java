@@ -22,7 +22,7 @@ public class LiveBroadcastService {
         List<String> liveStartTimes = new ArrayList<>();
 
         for (int i = 0; i < liveBroadcasts.size(); i++) {
-            String date = liveBroadcasts.get(i).getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String date = liveBroadcasts.get(i).getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
             liveStartTimes.add(date);
         }
 
