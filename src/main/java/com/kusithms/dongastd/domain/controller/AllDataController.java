@@ -1,8 +1,13 @@
 package com.kusithms.dongastd.domain.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kusithms.dongastd.domain.content.service.ContentService;
 import com.kusithms.dongastd.domain.contentdata.dto.TodayContent;
 import com.kusithms.dongastd.domain.contentdata.service.ContentDataService;
+import com.kusithms.dongastd.domain.controller.dto.Phase1;
+import com.kusithms.dongastd.domain.controller.dto.Phase3;
 import com.kusithms.dongastd.domain.livebroadcast.dto.TodayLive;
 import com.kusithms.dongastd.domain.livebroadcast.service.LiveBroadcastService;
 import com.kusithms.dongastd.domain.memo.service.MemoService;
@@ -18,6 +23,7 @@ import java.util.*;
 @RestController
 @Slf4j
 public class AllDataController {
+    private final MainController mainController;
     private final LiveBroadcastService liveBroadcastService;
     private final ContentDataService contentDataService;
     private final ContentService contentService;
@@ -25,7 +31,9 @@ public class AllDataController {
     private final NoticeService noticeService;
 
     @GetMapping("/all-data")
-    public Map<String, Object> getAllData() {
+    public String getAllData() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> schedule_calendar = new HashMap<>();
         Map<String, Object> schedule_today = new HashMap<>();
@@ -53,6 +61,14 @@ public class AllDataController {
         result.put("notice", noticeService.allNotices());
         result.put("content", contentService.findAverageContent());
 
-        return result;
+        List<Phase1> phase1 = mainController.totalGrowthBarChartPhase1(1);
+        List<Phase3> phase3 = mainController.totalGrowthBarChartPhase3(1);
+
+        result.put("phase1", phase1);
+        result.put("phase3", phase3);
+
+        String resultJson = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(result);
+        return resultJson;
     }
+
 }
