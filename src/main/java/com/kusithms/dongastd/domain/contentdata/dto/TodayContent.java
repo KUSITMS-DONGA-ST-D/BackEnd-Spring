@@ -6,16 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
 public class TodayContent {
     private String url;
     private String contentTitle;
-    private LocalDate createDate;
+    private String createDate;
 
     @Builder
-    public TodayContent(String url, String contentTitle, LocalDate createDate) {
+    public TodayContent(String url, String contentTitle, String createDate) {
         this.url = url;
         this.contentTitle = contentTitle;
         this.createDate = createDate;
@@ -25,7 +26,8 @@ public class TodayContent {
         return TodayContent.builder()
                 .contentTitle(contentData.getContent().getTitle())
                 .url(contentData.getUrl())
-                .createDate(LocalDate.from(contentData.getContent().getCreatedDate()))
+                .createDate(contentData.getContent().getCreatedDate()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH")))
                 .build();
     }
 }
