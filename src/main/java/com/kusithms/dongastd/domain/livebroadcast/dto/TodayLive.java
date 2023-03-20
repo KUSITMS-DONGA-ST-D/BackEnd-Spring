@@ -20,7 +20,7 @@ public class TodayLive {
     public TodayLive(String liveUrl, String liveTitle, LocalDateTime startTime, String status) {
         this.liveTitle = liveTitle;
         this.liveUrl = liveUrl;
-        this.startTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.startTime = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
         this.status = status;
     }
 
