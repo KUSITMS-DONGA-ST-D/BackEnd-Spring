@@ -19,8 +19,8 @@ public class VisitorService {
 	@PostConstruct
 	public void init() {
 		// for(int i=24; i>=0; i--){
-		// 	int newVisitor = (int)(Math.random() * 4) +1;
-		// 	int againVisitor = (int)(Math.random() * 4) +1;
+		// 	int newVisitor = (int)(Math.random() * 8) +4;
+		// 	int againVisitor = (int)(Math.random() * 15) +10;
 		//
 		// 	Visitor save = visitorRepository.save(Visitor.builder()
 		// 		.newVisitor(newVisitor)

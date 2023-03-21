@@ -15,45 +15,45 @@ import lombok.Setter;
 public class Phase3 implements Comparable<Phase3> {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm")
-	private LocalDateTime createDate;
-	private int viewNumber;
-	private int sessionTime;
+	private LocalDateTime created_date;
+	private int view_number;
+	private int session_time;
 
 
 	@Builder
-	public Phase3(LocalDateTime createDate, int viewNumber, int sessionTime) {
-		this.createDate = createDate;
-		this.viewNumber = viewNumber;
-		this.sessionTime = sessionTime;
+	public Phase3(LocalDateTime created_date, int view_number, int session_time) {
+		this.created_date = created_date;
+		this.view_number = view_number;
+		this.session_time = session_time;
 	}
 
 	public static Phase3 of(PageView pageView) {
 		return Phase3.builder()
-			.createDate(pageView.getCreatedDate())
-			.viewNumber(pageView.getViewCount())
-			.sessionTime((int)pageView.getDuration().getSeconds())
+			.created_date(pageView.getCreatedDate())
+			.view_number(pageView.getViewCount())
+			.session_time((int)pageView.getDuration().getSeconds())
 			.build();
 	}
 
 	public static Phase3 of(LocalDateTime localDateTime, int viewNumber, Duration duration){
 		return Phase3.builder()
-			.createDate(localDateTime)
-			.viewNumber(viewNumber)
-			.sessionTime((int)duration.getSeconds())
+			.created_date(localDateTime)
+			.view_number(viewNumber)
+			.session_time((int)duration.getSeconds())
 			.build();
 	}
 
 	@Override
 	public String toString() {
 		return "Phase3{" +
-			"createDate=" + createDate +
-			", viewNumber=" + viewNumber +
-			", sessionTime=" + sessionTime +
+			"createDate=" + created_date +
+			", viewNumber=" + view_number +
+			", sessionTime=" + session_time +
 			'}';
 	}
 
 	@Override
 	public int compareTo(Phase3 o) {
-		return createDate.compareTo(o.getCreateDate());
+		return created_date.compareTo(o.getCreated_date());
 	}
 }
