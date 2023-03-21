@@ -86,12 +86,10 @@ public class MainController {
 		List<Phase2> list = new ArrayList<>();
 
 		if(day == 1){
-			List<Visitor> visitors =
-				visitorRepository.findAll(PageRequest.of(0,day, Sort.by("id").descending())).getContent();
 
-			for (Visitor visitor : visitors) {
 
-			}
+		} else{
+
 		}
 		return list;
 	}
