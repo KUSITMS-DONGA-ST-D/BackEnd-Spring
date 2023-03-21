@@ -42,12 +42,14 @@ public class User extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private UserStatus status;
 
+	private String category;
+
 	private int age;
 
 	private LocalDateTime lastLoginDate;
 
 	@Builder
-	public User(Long id, String email, String username, String password, UserRole role, Gender gender, int age) {
+	public User(Long id, String email, String username, String password, UserRole role, Gender gender, int age, String category) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
@@ -57,6 +59,7 @@ public class User extends BaseEntity {
 		this.status = UserStatus.NORMAL;
 		this.age = age;
 		this.lastLoginDate = LocalDateTime.now();
+		this.category = category;
 	}
 
 	@Override
