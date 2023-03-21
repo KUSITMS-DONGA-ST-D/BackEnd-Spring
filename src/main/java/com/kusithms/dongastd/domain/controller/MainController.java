@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -69,13 +68,13 @@ public class MainController {
 					.newVisitor(newVisitor)
 					.againVisitor(againVisitor)
 					.totalVisitor(newVisitor+againVisitor)
-					.localDateTime(localDate.atStartOfDay())
+					.createDate(localDate.atStartOfDay())
 					.build());
 			}
 		}
 
 		List<Phase1> collect = list.stream()
-			.sorted(Comparator.comparing(Phase1::getLocalDateTime).reversed())
+			.sorted(Comparator.comparing(Phase1::getCreateDate).reversed())
 			.collect(Collectors.toList());
 		log.info(collect.toString());
 		return collect;
@@ -130,7 +129,7 @@ public class MainController {
 		}
 
 		List<Phase3> collect = list.stream()
-			.sorted(Comparator.comparing(Phase3::getLocalDateTime).reversed())
+			.sorted(Comparator.comparing(Phase3::getCreateDate).reversed())
 			.collect(Collectors.toList());
 		log.info(collect.toString());
 

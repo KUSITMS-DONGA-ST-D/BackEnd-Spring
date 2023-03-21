@@ -1,7 +1,6 @@
 package com.kusithms.dongastd.domain.controller.dto;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,21 +15,21 @@ import lombok.Setter;
 public class Phase3 implements Comparable<Phase3> {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm", timezone = "Asia/Seoul")
-	private LocalDateTime localDateTime;
+	private LocalDateTime createDate;
 	private int viewNumber;
 	private int sessionTime;
 
 
 	@Builder
-	public Phase3(LocalDateTime localDateTime, int viewNumber, int sessionTime) {
-		this.localDateTime = localDateTime;
+	public Phase3(LocalDateTime createDate, int viewNumber, int sessionTime) {
+		this.createDate = createDate;
 		this.viewNumber = viewNumber;
 		this.sessionTime = sessionTime;
 	}
 
 	public static Phase3 of(PageView pageView) {
 		return Phase3.builder()
-			.localDateTime(pageView.getCreatedDate())
+			.createDate(pageView.getCreatedDate())
 			.viewNumber(pageView.getViewCount())
 			.sessionTime((int)pageView.getDuration().getSeconds())
 			.build();
@@ -38,7 +37,7 @@ public class Phase3 implements Comparable<Phase3> {
 
 	public static Phase3 of(LocalDateTime localDateTime, int viewNumber, Duration duration){
 		return Phase3.builder()
-			.localDateTime(localDateTime)
+			.createDate(localDateTime)
 			.viewNumber(viewNumber)
 			.sessionTime((int)duration.getSeconds())
 			.build();
@@ -47,7 +46,7 @@ public class Phase3 implements Comparable<Phase3> {
 	@Override
 	public String toString() {
 		return "Phase3{" +
-			"localDateTime=" + localDateTime +
+			"createDate=" + createDate +
 			", viewNumber=" + viewNumber +
 			", sessionTime=" + sessionTime +
 			'}';
@@ -55,6 +54,6 @@ public class Phase3 implements Comparable<Phase3> {
 
 	@Override
 	public int compareTo(Phase3 o) {
-		return localDateTime.compareTo(o.getLocalDateTime());
+		return createDate.compareTo(o.getCreateDate());
 	}
 }
