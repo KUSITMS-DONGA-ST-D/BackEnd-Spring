@@ -23,9 +23,9 @@ public class PageViewService {
 
 	@PostConstruct
 	public void init() {
-		// for(int i = 3; i>0 ; i--){
+		// for(int i = 40; i>0 ; i--){
 		// 	PageView pageView = PageView.builder()
-		// 		.viewCount((int)(Math.random()* 100) + 1)
+		// 		.viewCount((int)(Math.random()* 300) + 100)
 		// 		.duration(Duration.ofSeconds((long)(Math.random()*100) + 1))
 		// 		.localDateTime(LocalDateTime.of(2023,3,28,15,00).minusDays(i))
 		// 		.build();
@@ -36,7 +36,7 @@ public class PageViewService {
 		//
 		// for(int i = 24; i>=0 ; i--){
 		// 	PageView pageView = PageView.builder()
-		// 		.viewCount((int)(Math.random()* 8) + 1)
+		// 		.viewCount((int)(Math.random()* 25) + 5)
 		// 		.duration(Duration.ofSeconds((long)(Math.random()*100) + 1))
 		// 		.localDateTime(LocalDateTime.of(2023,3,28,15,00).minusHours(i))
 		// 		.build();

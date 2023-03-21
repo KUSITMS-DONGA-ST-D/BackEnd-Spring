@@ -49,6 +49,7 @@ public class Visitor extends BaseEntity {
 			"id=" + id +
 			", newVisitor=" + newVisitor +
 			", againVisitor=" + againVisitor +
+			"createdDate=" + getCreatedDate() +
 			'}';
 	}
 }
