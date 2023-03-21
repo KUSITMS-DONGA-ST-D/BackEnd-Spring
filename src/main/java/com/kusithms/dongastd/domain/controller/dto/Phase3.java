@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class Phase3 implements Comparable<Phase3> {
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm")
 	private LocalDateTime createDate;
 	private int viewNumber;
 	private int sessionTime;

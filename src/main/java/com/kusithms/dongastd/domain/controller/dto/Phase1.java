@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Phase1 implements Comparable<Visitor>{
 
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH-mm")
 	private LocalDateTime createDate;
 	private int newVisitor;
 	private int againVisitor;
