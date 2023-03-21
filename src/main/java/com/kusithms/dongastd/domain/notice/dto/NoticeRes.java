@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -14,14 +13,14 @@ public class NoticeRes {
     private Long noticeId;
     private String noticeTitle;
     private String username;
-    private LocalDate createdDate;
+    private String createdDate;
 
     @Builder
-    public NoticeRes(Long noticeId, String noticeTitle, String username, LocalDateTime createDate) {
+    public NoticeRes(Long noticeId, String noticeTitle, String username, String createDate) {
         this.noticeId = noticeId;
         this.noticeTitle = noticeTitle;
         this.username = username;
-        this.createdDate = createDate.toLocalDate();
+        this.createdDate = createDate;
     }
 
     public static NoticeRes of(Notice notice) {
@@ -29,7 +28,7 @@ public class NoticeRes {
                 .noticeId(notice.getId())
                 .noticeTitle(notice.getTitle())
                 .username(notice.getUser().getUsername())
-                .createDate(notice.getCreatedDate())
+                .createDate(notice.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
     }
 }
