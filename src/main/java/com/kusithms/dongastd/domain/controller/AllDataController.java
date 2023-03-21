@@ -7,6 +7,7 @@ import com.kusithms.dongastd.domain.content.service.ContentService;
 import com.kusithms.dongastd.domain.contentdata.dto.TodayContent;
 import com.kusithms.dongastd.domain.contentdata.service.ContentDataService;
 import com.kusithms.dongastd.domain.controller.dto.Phase1;
+import com.kusithms.dongastd.domain.controller.dto.Phase2;
 import com.kusithms.dongastd.domain.controller.dto.Phase3;
 import com.kusithms.dongastd.domain.livebroadcast.dto.TodayLive;
 import com.kusithms.dongastd.domain.livebroadcast.service.LiveBroadcastService;
@@ -62,9 +63,11 @@ public class AllDataController {
         result.put("content", contentService.findAverageContent());
 
         List<Phase1> phase1 = mainController.totalGrowthBarChartPhase1(1);
+        List<Phase2> phase2 = mainController.totalGrowthBarChartPhase2(1);
         List<Phase3> phase3 = mainController.totalGrowthBarChartPhase3(1);
 
         result.put("phase1", phase1);
+        result.put("phase2", phase2);
         result.put("phase3", phase3);
 
         String resultJson = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(result);
