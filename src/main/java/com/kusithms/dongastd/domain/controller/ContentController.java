@@ -23,10 +23,12 @@ public class ContentController {
     private final ContentService contentService;
 
     @GetMapping("filterd")
-    public String filtered(String start_day, String end_day, @RequestParam(required = false) Integer age, String gender, String category) throws JsonProcessingException {
+    public String filtered(String start_day, String end_day, @RequestParam(required = false) Integer age, @RequestParam(required = false) String gender, @RequestParam(required = false) String category) throws JsonProcessingException {
         List<ContentsRes> averageFilter;
         if (age == null) {
             averageFilter = contentService.findAverageFilter(start_day, end_day, gender, category);
+        } else if (gender == null){
+            averageFilter = contentService.findAverageFilter(start_day, end_day, age, category);
         } else {
             averageFilter = contentService.findAverageFilter(start_day, end_day, age, gender, category);
         }
