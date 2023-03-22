@@ -25,6 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByGenderAndCategory(Gender gender, String category);
     List<User> findAllByGender(Gender gender);
+    List<User> findAllByCategory(String category);
 
     List<User> findAllByAgeIsBetweenAndGenderAndCategory(int startAge, int endAge, Gender gender, String category);
 

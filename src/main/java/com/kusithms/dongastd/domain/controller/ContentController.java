@@ -36,7 +36,7 @@ public class ContentController {
         }else if (gender == null && age != null && category == null) {
             averageFilter = contentService.findAverageFilter(start_day, end_day, age);
         }else if (gender == null && age == null && category != null) {
-            averageFilter = contentService.findAverageFilter(start_day, end_day, gender);
+            averageFilter = contentService.findAverageFilter(start_day, end_day, category);
         } else {
             averageFilter = contentService.findAverageFilter(start_day, end_day, age, gender, category);
         }
