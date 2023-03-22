@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ContentRepository extends JpaRepository<Content, Long> {
-    List<Content> findAllByCreatedDateBeforeAndCategory(LocalDateTime start, String category);
-    List<Content> findAllByCategory(String category);
+//    List<Content> findAllByCreatedDateBeforeAndCategory(LocalDateTime end, String category);
+    List<Content> findAllByCreatedDateBefore(LocalDateTime end);
 }
