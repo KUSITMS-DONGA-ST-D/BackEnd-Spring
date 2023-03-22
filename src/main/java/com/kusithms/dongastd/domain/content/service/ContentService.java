@@ -78,55 +78,18 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        log.info("startTime = {}", startTime);
-        log.info("endTime = {}", endTime);
-        Gender gender;
+        Gender gender = null;
 
-        if (inputGender.equals("MALE")) {
-            gender = Gender.MALE;
-        } else {
-            gender = Gender.FEMALE;
-        }
+        gender = getGender(inputGender, gender);
+
         int startAge = 0;
-        int endAge = 0;
-        if (20 <= age && age < 30) {
-            startAge = 20;
-            endAge = 29;
-        }
-        if (30 <= age && age < 40) {
-            startAge = 30;
-            endAge = 39;
-        }
-        if (40 <= age && age < 50) {
-            startAge = 40;
-            endAge = 49;
-        }
-        if (50 <= age && age < 60) {
-            startAge = 50;
-            endAge = 59;
-        }
-        if (60 <= age && age < 70) {
-            startAge = 60;
-            endAge = 69;
-        }
-        if (70 <= age && age < 80) {
-            startAge = 70;
-            endAge = 79;
-        }
-        if (80 <= age && age < 90) {
-            startAge = 80;
-            endAge = 89;
-        }
+        startAge = getStartAge(age, startAge);
+        int endAge = startAge + 9;
+
 
         List<User> filterUser = userRepository.findAllByAgeIsBetweenAndGenderAndCategory(startAge, endAge, gender, category);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("gender = {}", gender);
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
@@ -144,25 +107,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, gender, category, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, gender, category, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -183,30 +131,16 @@ public class ContentService {
 
         log.info("startTime = {}", startTime);
         log.info("endTime = {}", endTime);
-        Gender gender;
+        Gender gender = null;
 
-        if (inputGender.equals("MALE")) {
-            gender = Gender.MALE;
-        } else {
-            gender = Gender.FEMALE;
-        }
+        gender = getGender(inputGender, gender);
 
-        List<User> filterUser = userRepository.findAllByGenderAndCategory(gender, category);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("gender = {}", gender);
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -217,25 +151,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(gender, category, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(gender, category, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -259,50 +178,16 @@ public class ContentService {
         log.info("endTime = {}", endTime);
 
         int startAge = 0;
-        int endAge = 0;
-        if (20 <= age && age < 30) {
-            startAge = 20;
-            endAge = 29;
-        }
-        if (30 <= age && age < 40) {
-            startAge = 30;
-            endAge = 39;
-        }
-        if (40 <= age && age < 50) {
-            startAge = 40;
-            endAge = 49;
-        }
-        if (50 <= age && age < 60) {
-            startAge = 50;
-            endAge = 59;
-        }
-        if (60 <= age && age < 70) {
-            startAge = 60;
-            endAge = 69;
-        }
-        if (70 <= age && age < 80) {
-            startAge = 70;
-            endAge = 79;
-        }
-        if (80 <= age && age < 90) {
-            startAge = 80;
-            endAge = 89;
-        }
+        startAge = getStartAge(age, startAge);
+        int endAge = startAge + 9;
 
-        List<User> filterUser = userRepository.findAllByAgeIsBetweenAndCategory(startAge, endAge, category);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
             log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -313,25 +198,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, category, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, category, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -352,60 +222,20 @@ public class ContentService {
 
         log.info("startTime = {}", startTime);
         log.info("endTime = {}", endTime);
-        Gender gender;
+        Gender gender = null;
 
-        if (inputGender.equals("MALE")) {
-            gender = Gender.MALE;
-        } else {
-            gender = Gender.FEMALE;
-        }
+        gender = getGender(inputGender, gender);
         int startAge = 0;
-        int endAge = 0;
-        if (20 <= age && age < 30) {
-            startAge = 20;
-            endAge = 29;
-        }
-        if (30 <= age && age < 40) {
-            startAge = 30;
-            endAge = 39;
-        }
-        if (40 <= age && age < 50) {
-            startAge = 40;
-            endAge = 49;
-        }
-        if (50 <= age && age < 60) {
-            startAge = 50;
-            endAge = 59;
-        }
-        if (60 <= age && age < 70) {
-            startAge = 60;
-            endAge = 69;
-        }
-        if (70 <= age && age < 80) {
-            startAge = 70;
-            endAge = 79;
-        }
-        if (80 <= age && age < 90) {
-            startAge = 80;
-            endAge = 89;
-        }
+        startAge = getStartAge(age, startAge);
+        int endAge = startAge + 9;
 
-        List<User> filterUser = userRepository.findAllByAgeIsBetweenAndGender(startAge, endAge, gender);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("gender = {}", gender);
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
             log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -416,25 +246,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndContentAndCreatedDateBetween(startAge, endAge, gender, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndContentAndCreatedDateBetween(startAge, endAge, gender, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -453,54 +268,17 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        log.info("startTime = {}", startTime);
-        log.info("endTime = {}", endTime);
-
         int startAge = 0;
-        int endAge = 0;
-        if (20 <= age && age < 30) {
-            startAge = 20;
-            endAge = 29;
-        }
-        if (30 <= age && age < 40) {
-            startAge = 30;
-            endAge = 39;
-        }
-        if (40 <= age && age < 50) {
-            startAge = 40;
-            endAge = 49;
-        }
-        if (50 <= age && age < 60) {
-            startAge = 50;
-            endAge = 59;
-        }
-        if (60 <= age && age < 70) {
-            startAge = 60;
-            endAge = 69;
-        }
-        if (70 <= age && age < 80) {
-            startAge = 70;
-            endAge = 79;
-        }
-        if (80 <= age && age < 90) {
-            startAge = 80;
-            endAge = 89;
-        }
+        startAge = getStartAge(age, startAge);
+        int endAge = startAge + 9;
 
-        List<User> filterUser = userRepository.findAllByAgeIsBetween(startAge, endAge);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
             log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -511,25 +289,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndContentAndCreatedDateBetween(startAge, endAge, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndContentAndCreatedDateBetween(startAge, endAge, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -541,7 +304,6 @@ public class ContentService {
     public List<ContentsRes> findAverageFilter(String start_day, String end_day, String inputGender) {
         int loop = 0;
 
-
         String startDay = start_day + "-00-00";
         String endDay = end_day + "-00-00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
@@ -549,32 +311,15 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        log.info("startTime = {}", startTime);
-        log.info("endTime = {}", endTime);
-        Gender gender;
+        Gender gender = null;
 
-        if (inputGender.equals("MALE")) {
-            gender = Gender.MALE;
-        } else {
-            gender = Gender.FEMALE;
-        }
+        gender = getGender(inputGender, gender);
 
-        List<User> filterUser = userRepository.findAllByGender(gender);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
 
-        log.info("gender = {}", gender);
-
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
-
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
-
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -585,25 +330,10 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_GenderAndContentAndCreatedDateBetween(gender, allContents.get(i), startTime, endTime);
+            List<Interest> interests = interestRepository.findAllByUser_GenderAndContentAndCreatedDateBetween(gender, allContents.get(i), startTime, endTime);
 
-                loop++;
-
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes(contentDatas.get(0).getUrl(), allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -622,23 +352,14 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        log.info("startTime = {}", startTime);
-        log.info("endTime = {}", endTime);
-
-        List<User> filterUser = userRepository.findAllByCategory(category);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
 
-        log.info("allContents Size = {}", allContents.size());
-
-        log.info("filterUser size = {}", filterUser.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
             log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -649,25 +370,11 @@ public class ContentService {
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
 
-            for (int j = 0; j < filterUser.size(); j++) {
-                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            List<Comment> comments = commentRepository.findAllByUser_CategoryAndContentAndCreatedDateBetween(category, allContents.get(i), startTime, endTime);
 
-                loop++;
+            List<Interest> interests = interestRepository.findAllByUser_CategoryAndContentAndCreatedDateBetween(category, allContents.get(i), startTime, endTime);
 
-                for (int z = 0; z < filterComment.size(); z++) {
-                    comment++;
-
-                    loop++;
-                }
-
-                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-
-                if (filterInterest.isPresent())
-                    interest++;
-
-                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
-            }
-            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interests.size(), comments.size(), avgTime);
             filterContentsRes.add(contentsRes);
         }
 
@@ -685,18 +392,12 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        log.info("startTime = {}", startTime);
-        log.info("endTime = {}", endTime);
-
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
-
-        log.info("allContents Size = {}", allContents.size());
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
             int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
@@ -716,5 +417,36 @@ public class ContentService {
 
         log.info("total loop = {}", loop);
         return filterContentsRes;
+    }
+
+    private int getStartAge(int age, int startAge) {
+        if (20 <= age && age < 30) {
+            startAge = 20;
+        }
+        if (30 <= age && age < 40) {
+            startAge = 30;
+        }
+        if (40 <= age && age < 50) {
+            startAge = 40;
+        }
+        if (50 <= age && age < 60) {
+            startAge = 50;
+        }
+        if (60 <= age && age < 70) {
+            startAge = 60;
+        }
+        if (70 <= age && age < 80) {
+            startAge = 70;
+        }
+        return startAge;
+    }
+
+    private Gender getGender(String inputGender, Gender gender) {
+        if (inputGender.equals("MALE")) {
+            gender = Gender.MALE;
+        } else {
+            gender = Gender.FEMALE;
+        }
+        return gender;
     }
 }
