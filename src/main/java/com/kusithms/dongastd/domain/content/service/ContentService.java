@@ -167,4 +167,81 @@ public class ContentService {
         log.info("total loop = {}", loop);
         return filterContentsRes;
     }
+
+    public List<ContentsRes> findAverageFilter(String start_day, String end_day, String inputGender, String category) {
+        int loop = 0;
+
+        String startDay = start_day + "-00-00";
+        String endDay = end_day + "-00-00";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
+
+        LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
+
+        log.info("startTime = {}", startTime);
+        log.info("endTime = {}", endTime);
+        Gender gender;
+
+        if (inputGender.equals("MALE")) {
+            gender = Gender.MALE;
+        } else {
+            gender = Gender.FEMALE;
+        }
+
+        List<User> filterUser = userRepository.findAllByGenderAndCategory(gender, category);
+        List<Content> allContents = contentRepo.findAllByCreatedDateBeforeAndCategory(endTime, category);
+        List<ContentsRes> filterContentsRes = new ArrayList<>();
+
+        log.info("gender = {}", gender);
+
+        log.info("allContents Size = {}", allContents.size());
+
+        log.info("filterUser size = {}", filterUser.size());
+
+        for (int i = 0; i < allContents.size(); i++) {
+            loop++;
+
+            log.info("들어옴 {}", allContents.get(i).toString());
+            int comment = 0;
+            int interest = 0;
+            int avgTime = 0;
+            List<ContentData> filterdContentDatas = contentDataRepository.findAllByCreatedDateBetweenAndContent(startTime, endTime, allContents.get(i));
+
+            for (int j = 0; j < filterdContentDatas.size(); j++) {
+                long avgMinute = filterdContentDatas.get(j).getDuration().toMinutes();
+                avgTime += avgMinute;
+
+                loop++;
+            }
+
+            if (filterdContentDatas.size() != 0) {
+                avgTime /= filterdContentDatas.size();
+            }
+
+            for (int j = 0; j < filterUser.size(); j++) {
+                List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+
+                loop++;
+
+                for (int z = 0; z < filterComment.size(); z++) {
+                    comment++;
+
+                    loop++;
+                }
+
+                Optional<Interest> filterInterest = interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+
+                if (filterInterest.isPresent())
+                    interest++;
+
+                interestRepository.findByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
+            }
+            ContentsRes contentsRes = new ContentsRes("test", allContents.get(i).getTitle(), allContents.get(i).getCategory(), interest, comment, avgTime);
+            filterContentsRes.add(contentsRes);
+        }
+
+
+        log.info("total loop = {}", loop);
+        return filterContentsRes;
+    }
 }
