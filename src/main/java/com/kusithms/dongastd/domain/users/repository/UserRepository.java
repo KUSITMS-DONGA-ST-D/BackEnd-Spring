@@ -18,9 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByCreatedDateBetween(LocalDateTime start, LocalDateTime end);
 
-    List<User> findAllByAge(int age);
+    List<User> findAllByAgeIsBetween(int startAge, int endAge);
 
-    List<User> findAllByAgeAndGender(int age, Gender gender);
+    List<User> findAllByAgeIsBetweenAndGender(int startAge, int endAge, Gender gender);
+    List<User> findAllByAgeIsBetweenAndCategory(int startAge, int endAge, String category);
 
     List<User> findAllByGenderAndCategory(Gender gender, String category);
 
