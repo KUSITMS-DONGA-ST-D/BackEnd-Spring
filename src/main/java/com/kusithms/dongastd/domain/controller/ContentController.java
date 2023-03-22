@@ -29,6 +29,10 @@ public class ContentController {
             averageFilter = contentService.findAverageFilter(start_day, end_day, gender, category);
         } else if (gender == null){
             averageFilter = contentService.findAverageFilter(start_day, end_day, age, category);
+        } else if (category == null) {
+            averageFilter = contentService.findAverageFilterV2(start_day, end_day, age, gender);
+        } else if (gender == null && category == null) {
+            averageFilter = contentService.findAverageFilter(start_day, end_day, age);
         } else {
             averageFilter = contentService.findAverageFilter(start_day, end_day, age, gender, category);
         }

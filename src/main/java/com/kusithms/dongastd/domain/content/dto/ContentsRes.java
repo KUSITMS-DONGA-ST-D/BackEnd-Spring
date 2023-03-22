@@ -22,14 +22,14 @@ public class ContentsRes {
     private int comment;
     private int averageViewTime;
 
-    public static ContentsRes of(ContentData contentData, Content content, int interest, int comment) {
+    public static ContentsRes of(String url, int averageViewTime, Content content, int interest, int comment) {
         return ContentsRes.builder()
-                .url(contentData.getUrl())
+                .url(url)
                 .contentTitle(content.getTitle())
                 .interest(interest)
                 .comment(comment)
                 .category(content.getCategory())
-                .averageViewTime(contentData.getDuration().toMinutesPart())
+                .averageViewTime(averageViewTime)
                 .build();
     }
 }
