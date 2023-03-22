@@ -22,7 +22,7 @@ import java.util.Map;
 public class ContentController {
     private final ContentService contentService;
 
-    @GetMapping("filterd")
+    @GetMapping("/contents-data")
     public String filtered(String start_day, String end_day, @RequestParam(required = false) Integer age, @RequestParam(required = false) String gender, @RequestParam(required = false) String category) throws JsonProcessingException {
         List<ContentsRes> averageFilter;
         if (gender != null && age == null && category != null) {
