@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ContentDataRepository extends JpaRepository<ContentData, Long> {
-    ContentData findByCreatedDateBetweenAndContent(LocalDateTime start, LocalDateTime end, Content content);
+    ContentData findByContent(Content content);
     List<ContentData> findAllByCreatedDateBetweenAndContent(LocalDateTime start, LocalDateTime end, Content content);
     List<ContentData> findByContent_CreatedDateBetween(LocalDateTime start, LocalDateTime end);
 }

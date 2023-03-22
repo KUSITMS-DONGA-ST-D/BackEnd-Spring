@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {
-    List<Interest> findAllByContent(Content content);
+    List<Interest> findAllByContentAndCreatedDateBetween(Content content, LocalDateTime start, LocalDateTime end);
     Optional<Interest> findByUserAndContentAndCreatedDateBetween(User user, Content content, LocalDateTime start, LocalDateTime end);
 }

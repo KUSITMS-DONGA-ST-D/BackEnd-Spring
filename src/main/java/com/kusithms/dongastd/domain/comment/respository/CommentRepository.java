@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByContent(Content content);
+    List<Comment> findAllByContentAndCreatedDateBetween(Content content,LocalDateTime start, LocalDateTime end);
 
     List<Comment> findAllByUserAndContentAndCreatedDateBetween(User user, Content content, LocalDateTime start, LocalDateTime end);
 }

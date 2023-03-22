@@ -49,9 +49,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             Content content = allContents.get(i);
 
-            ContentData contentData = contentDataRepository.findByCreatedDateBetweenAndContent(now.minusDays(1), now, content);
-            List<Comment> comments = commentRepository.findAllByContent(content);
-            List<Interest> interests = interestRepository.findAllByContent(content);
+            ContentData contentData = contentDataRepository.findByContent(content);
+            List<Comment> comments = commentRepository.findAllByContentAndCreatedDateBetween(content, now.minusDays(1), now);
+            List<Interest> interests = interestRepository.findAllByContentAndCreatedDateBetween(content, now.minusDays(1), now);
 
             ContentsRes res = ContentsRes.of(contentData, content, interests.size(), comments.size());
             allContentsRes.add(res);
@@ -128,18 +128,9 @@ public class ContentService {
             int comment = 0;
             int interest = 0;
             int avgTime = 0;
-            List<ContentData> filterdContentDatas = contentDataRepository.findAllByCreatedDateBetweenAndContent(startTime, endTime, allContents.get(i));
 
-            for (int j = 0; j < filterdContentDatas.size(); j++) {
-                long avgMinute = filterdContentDatas.get(j).getDuration().toMinutes();
-                avgTime += avgMinute;
-
-                loop++;
-            }
-
-            if (filterdContentDatas.size() != 0) {
-                avgTime /= filterdContentDatas.size();
-            }
+            ContentData contentData = contentDataRepository.findByContent(allContents.get(i));
+            avgTime = contentData.getDuration().toMinutesPart();
 
             for (int j = 0; j < filterUser.size(); j++) {
                 List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
@@ -205,18 +196,9 @@ public class ContentService {
             int comment = 0;
             int interest = 0;
             int avgTime = 0;
-            List<ContentData> filterdContentDatas = contentDataRepository.findAllByCreatedDateBetweenAndContent(startTime, endTime, allContents.get(i));
 
-            for (int j = 0; j < filterdContentDatas.size(); j++) {
-                long avgMinute = filterdContentDatas.get(j).getDuration().toMinutes();
-                avgTime += avgMinute;
-
-                loop++;
-            }
-
-            if (filterdContentDatas.size() != 0) {
-                avgTime /= filterdContentDatas.size();
-            }
+            ContentData contentData = contentDataRepository.findByContent(allContents.get(i));
+            avgTime = contentData.getDuration().toMinutesPart();
 
             for (int j = 0; j < filterUser.size(); j++) {
                 List<Comment> filterComment = commentRepository.findAllByUserAndContentAndCreatedDateBetween(filterUser.get(j), allContents.get(i), startTime, endTime);
