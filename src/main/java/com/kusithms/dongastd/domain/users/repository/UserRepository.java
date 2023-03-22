@@ -3,7 +3,6 @@ package com.kusithms.dongastd.domain.users.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kusithms.dongastd.domain.users.entity.Gender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
