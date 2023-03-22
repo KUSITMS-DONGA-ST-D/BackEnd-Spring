@@ -1,5 +1,8 @@
 package com.kusithms.dongastd.domain.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kusithms.dongastd.domain.content.dto.ContentsRes;
 import com.kusithms.dongastd.domain.content.service.ContentService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +23,7 @@ public class ContentController {
     private final ContentService contentService;
 
     @GetMapping("filterd")
-    public Map<String, Object> filtered(String start_day, String end_day, @RequestParam(required = false) Integer age, String gender, String category) {
+    public String filtered(String start_day, String end_day, @RequestParam(required = false) Integer age, String gender, String category) throws JsonProcessingException {
         List<ContentsRes> averageFilter;
         if (age == null) {
             averageFilter = contentService.findAverageFilter(start_day, end_day, gender, category);
@@ -31,6 +34,10 @@ public class ContentController {
         Map<String, Object> result = new HashMap<>();
         result.put("result", averageFilter);
 
-        return result;
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String resultJson = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(result);
+
+        return resultJson;
     }
 }
