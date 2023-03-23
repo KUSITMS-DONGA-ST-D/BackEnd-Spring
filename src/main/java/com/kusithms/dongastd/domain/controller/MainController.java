@@ -44,7 +44,7 @@ public class MainController {
 		if(day == 1){
 			List<Visitor> visitorList = visitorRepository
 				.findByCreatedDateBefore(
-					LocalDateTime.of(2023, 3, 28, 15, 00),
+					LocalDateTime.of(2023, 3, 28, 15, 59),
 					PageRequest.of(0, 24, Sort.by("id").descending()))
 				.getContent();
 
@@ -52,7 +52,7 @@ public class MainController {
 				list.add(Phase1.of(visitor));
 			}
 		} else{
-			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 14, 59);
+			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 15, 59);
 			List<Visitor> visitorList = visitorRepository
 				.findByCreatedDateBetween(endTime.minusDays(day), endTime, Sort.by("id").descending());
 			Map<LocalDate, List<Visitor>> collect = visitorList.stream()
@@ -89,12 +89,12 @@ public class MainController {
 
 		if(day == 1){
 			Map<LocalDateTime, List<User>> newUserListByHour = userRepository.findByCreatedDateBetween(
-					LocalDateTime.of(2023,3,27,15,00),
-					LocalDateTime.of(2023, 3, 28, 14, 59))
+					LocalDateTime.of(2023,3,27,15,59),
+					LocalDateTime.of(2023, 3, 28, 15, 59))
 				.stream().collect(Collectors.groupingBy(User::getCreatedDate));
 
 			List<Visitor> visitorList = visitorRepository.findByCreatedDateBefore(
-					LocalDateTime.of(2023, 3, 28, 15, 00),
+					LocalDateTime.of(2023, 3, 28, 15, 59),
 					PageRequest.of(0, 24, Sort.by("id").descending()))
 				.getContent();
 
@@ -114,7 +114,7 @@ public class MainController {
 					.build());
 			}
 		} else{
-			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 14, 59);
+			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 15, 59);
 
 			Map<LocalDate, List<User>> newUserListByHour = userRepository.findByCreatedDateBetween(
 					endTime.minusDays(day),endTime)
@@ -153,7 +153,7 @@ public class MainController {
 		if(day == 1){
 			List<PageView> pageViewList = pageViewRepository
 				.findByCreatedDateBefore(
-					LocalDateTime.of(2023, 3, 28, 15, 00),
+					LocalDateTime.of(2023, 3, 28, 15, 59),
 					PageRequest.of(0, 24, Sort.by("id").descending()))
 				.getContent();
 
@@ -161,7 +161,7 @@ public class MainController {
 				list.add(Phase3.of(pageView));
 			}
 		} else{
-			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 14, 59);
+			LocalDateTime endTime = LocalDateTime.of(2023, 3, 28, 15, 59);
 			List<PageView> pageViewList = pageViewRepository
 				.findByCreatedDateBetween(endTime.minusDays(day), endTime, Sort.by("id").descending());
 			Map<LocalDate, List<PageView>> collect = pageViewList.stream()
