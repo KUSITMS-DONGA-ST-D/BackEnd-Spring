@@ -10,11 +10,11 @@ import com.kusithms.dongastd.domain.contentdata.repository.ContentDataRepository
 import com.kusithms.dongastd.domain.interest.entity.Interest;
 import com.kusithms.dongastd.domain.interest.repository.InterestRepository;
 import com.kusithms.dongastd.domain.users.entity.Gender;
-import com.kusithms.dongastd.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -27,7 +27,6 @@ public class ContentService {
     private final ContentDataRepository contentDataRepository;
     private final CommentRepository commentRepository;
     private final InterestRepository interestRepository;
-    private final UserRepository userRepository;
 
     public List<String> findContentSchedule() {
         List<Content> contents = contentRepo.findAll();
@@ -69,7 +68,6 @@ public class ContentService {
     public List<ContentsRes> findAverageFilter(String start_day, String end_day, int age, String inputGender, String category) {
         int loop = 0;
 
-
         String startDay = start_day + "-00-00";
         String endDay = end_day + "-00-00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
@@ -77,9 +75,7 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        Gender gender = null;
-
-        gender = getGender(inputGender, gender);
+        Gender gender = getGender(inputGender);
 
         int startAge = 0;
         startAge = getStartAge(age, startAge);
@@ -120,9 +116,8 @@ public class ContentService {
 
         log.info("startTime = {}", startTime);
         log.info("endTime = {}", endTime);
-        Gender gender = null;
 
-        gender = getGender(inputGender, gender);
+        Gender gender = getGender(inputGender);
 
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
@@ -181,7 +176,6 @@ public class ContentService {
             filterContentsRes.add(contentsRes);
         }
 
-
         log.info("total loop = {}", loop);
         return filterContentsRes;
     }
@@ -198,9 +192,9 @@ public class ContentService {
 
         log.info("startTime = {}", startTime);
         log.info("endTime = {}", endTime);
-        Gender gender = null;
 
-        gender = getGender(inputGender, gender);
+        Gender gender = getGender(inputGender);
+
         int startAge = 0;
         startAge = getStartAge(age, startAge);
         int endAge = startAge + 9;
@@ -273,9 +267,7 @@ public class ContentService {
         LocalDateTime startTime = LocalDateTime.parse(startDay, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endDay, formatter);
 
-        Gender gender = null;
-
-        gender = getGender(inputGender, gender);
+        Gender gender = getGender(inputGender);
 
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
@@ -385,13 +377,11 @@ public class ContentService {
         return startAge;
     }
 
-    private Gender getGender(String inputGender, Gender gender) {
+    private Gender getGender(String inputGender) {
         if (inputGender.equals("MALE")) {
-            gender = Gender.MALE;
-        } else {
-            gender = Gender.FEMALE;
+            return Gender.MALE;
         }
-        return gender;
+        return Gender.FEMALE;
     }
 
     private int getAvgTime(List<ContentData> contentDatas) {
