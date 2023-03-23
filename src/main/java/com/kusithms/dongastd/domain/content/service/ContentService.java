@@ -10,7 +10,6 @@ import com.kusithms.dongastd.domain.contentdata.repository.ContentDataRepository
 import com.kusithms.dongastd.domain.interest.entity.Interest;
 import com.kusithms.dongastd.domain.interest.repository.InterestRepository;
 import com.kusithms.dongastd.domain.users.entity.Gender;
-import com.kusithms.dongastd.domain.users.entity.User;
 import com.kusithms.dongastd.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +54,7 @@ public class ContentService {
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(content);
 
             for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
+                avgTime += contentDatas.get(j).getDuration().toMinutesPart();
             }
             if (contentDatas.size() != 0)
                 avgTime /= contentDatas.size();
@@ -87,25 +86,15 @@ public class ContentService {
         int endAge = startAge + 9;
 
 
-        List<User> filterUser = userRepository.findAllByAgeIsBetweenAndGenderAndCategory(startAge, endAge, gender, category);
         List<Content> allContents = contentRepo.findAllByCreatedDateBefore(endTime);
         List<ContentsRes> filterContentsRes = new ArrayList<>();
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int comment = 0;
-            int interest = 0;
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, gender, category, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, gender, category, allContents.get(i), startTime, endTime);
@@ -141,15 +130,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(gender, category, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_GenderAndUser_CategoryAndContentAndCreatedDateBetween(gender, category, allContents.get(i), startTime, endTime);
@@ -187,16 +170,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, category, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_CategoryAndContentAndCreatedDateBetween(startAge, endAge, category, allContents.get(i), startTime, endTime);
@@ -235,16 +211,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndContentAndCreatedDateBetween(startAge, endAge, gender, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndUser_GenderAndContentAndCreatedDateBetween(startAge, endAge, gender, allContents.get(i), startTime, endTime);
@@ -278,16 +247,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_AgeIsBetweenAndContentAndCreatedDateBetween(startAge, endAge, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_AgeIsBetweenAndContentAndCreatedDateBetween(startAge, endAge, allContents.get(i), startTime, endTime);
@@ -320,15 +282,10 @@ public class ContentService {
 
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
-            int avgTime = 0;
 
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_GenderAndContentAndCreatedDateBetween(gender, allContents.get(i), startTime, endTime);
             List<Interest> interests = interestRepository.findAllByUser_GenderAndContentAndCreatedDateBetween(gender, allContents.get(i), startTime, endTime);
@@ -359,16 +316,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            log.info("들어옴 {}", allContents.get(i).toString());
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByUser_CategoryAndContentAndCreatedDateBetween(category, allContents.get(i), startTime, endTime);
 
@@ -398,15 +348,9 @@ public class ContentService {
         for (int i = 0; i < allContents.size(); i++) {
             loop++;
 
-            int avgTime = 0;
-
             List<ContentData> contentDatas = contentDataRepository.findAllByContent(allContents.get(i));
 
-            for (int j = 0; j < contentDatas.size(); j++) {
-                avgTime = contentDatas.get(j).getDuration().toMinutesPart();
-            }
-            if (contentDatas.size() != 0)
-                avgTime /= contentDatas.size();
+            int avgTime = getAvgTime(contentDatas);
 
             List<Comment> comments = commentRepository.findAllByContentAndCreatedDateBetween(allContents.get(i), startTime, endTime);
             List<Interest> intersts = interestRepository.findAllByContentAndCreatedDateBetween(allContents.get(i), startTime, endTime);
@@ -448,5 +392,17 @@ public class ContentService {
             gender = Gender.FEMALE;
         }
         return gender;
+    }
+
+    private int getAvgTime(List<ContentData> contentDatas) {
+        int avgTime = 0;
+
+        for (int j = 0; j < contentDatas.size(); j++) {
+            avgTime += contentDatas.get(j).getDuration().toMinutesPart();
+        }
+        if (contentDatas.size() != 0)
+            avgTime /= contentDatas.size();
+
+        return avgTime;
     }
 }
