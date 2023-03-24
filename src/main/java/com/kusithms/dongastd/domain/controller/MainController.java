@@ -108,7 +108,7 @@ public class MainController {
 				}
 				list.add(Phase2.builder()
 					.new_users(newUser)
-					.accumulate_users(userRepository.findByCreatedDateBefore(localDateTime.plusHours(1)).size())
+					.accumulate_users(userRepository.findByCreatedDateBefore(localDateTime.plusHours(1)).size()+10296)
 					.conversion_rate((int)((double)newUser/(double)visitorCount*100))
 					.created_date(localDateTime)
 					.build());
@@ -133,7 +133,7 @@ public class MainController {
 				}
 				list.add(Phase2.builder()
 					.new_users(newUser)
-					.accumulate_users(userRepository.findByCreatedDateBefore(localDate.atStartOfDay().plusDays(1)).size())
+					.accumulate_users(userRepository.findByCreatedDateBefore(localDate.atStartOfDay().plusDays(1)).size()+10296)
 					.conversion_rate((int)((double)newUser/(double)visitorCount*100))
 					.created_date(localDate.atStartOfDay())
 					.build());
@@ -175,7 +175,7 @@ public class MainController {
 					viewCount+=pageView.getViewCount();
 					duration = duration.plus(pageView.getDuration());
 				}
-				duration.dividedBy(collect.get(localDate).size());
+				duration = duration.dividedBy(collect.get(localDate).size());
 
 				list.add(Phase3.of(localDate.atStartOfDay(), viewCount, duration));
 			}
